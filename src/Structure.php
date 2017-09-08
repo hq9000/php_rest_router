@@ -1,8 +1,8 @@
 <?php
 
-namespace hq9000\RestApiRouter;
+namespace hq9000\PhpRestRouter;
 
-use hq9000\RestApiRouter\Node;
+use hq9000\PhpRestRouter\Node;
 use Exception;
 
 class Structure {
@@ -36,26 +36,29 @@ class Structure {
     }
     
     /**
+     * This function returns the final node for this path and, 
+     * as a side effect, modifies supplied array 
+     * (passed by reference) so that it eventually
+     * contains all the data gathered during travel. 
      * 
      * @param type $path
      * @param type $pathData
-     * @return array
+     * @return Node
      */
-    public function trace($path) {
+    public function trace($path, &$dataAccumulator) {
         if (!$this->isInitialized()) {
             $this->initialize();
         }
         
         /* @var $cursor Node */
         $cursor=$this->rootNode;        
-        $pathDataAccumulator=[];
         
         while ($nextNode=$cursor->findOutputNode($path)) {
-            $path=$nextNode->processPath($path, $pathDataAccumulator);
+            $path=$nextNode->processPath($path, $dataAccumulator);
             $cursor=$nextNode;
         }
         
-        return [ $cursor, $pathDataAccumulator ];
+        return $cursor;
     }
     
     

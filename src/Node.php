@@ -1,8 +1,9 @@
 <?php
 
-namespace hq9000\RestApiRouter;
+namespace hq9000\PhpRestRouter;
 
 use Exception;
+use hq9000\PhpRestRouter\Exceptions\ParseException;
 
 class Node {
 
@@ -59,7 +60,7 @@ class Node {
             }            
         }
         
-        throw new Exception('path is not fully parsed yet, but output node can\'t be dertermined. Path remainder is ' . $remainingPath);
+        throw new ParseException('path is not fully parsed yet, but output node can\'t be dertermined. Path remainder is ' . $remainingPath);
     }
     
     public function handle($pathData, InternalApiRequest $request) {
