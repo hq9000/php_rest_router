@@ -1,7 +1,13 @@
 {
     "name": "hq9000/php-rest-router",
+    "type": "library",
     "description": "A framework for building REST API structures",
     "require": {
-        "php": "^5.3.3 || ^7.0"
+        "php": "^5.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "hq9000\\PhpRestRouter\\": "src/"
+        }
     }
 }
