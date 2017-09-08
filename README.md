@@ -1,2 +1,2 @@
-# php_rest_router
-A PHP framework for building REST API structures
+# PHP REST router
+A simple PHP framework for building REST API structures.
