@@ -1,0 +1,7 @@
+{
+    "name": "hq9000/php-rest-router",
+    "description": "A framework for building REST API structures",
+    "require": {
+        "php": "^5.3.3 || ^7.0"
+    }
+}

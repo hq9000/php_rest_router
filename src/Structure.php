@@ -67,4 +67,10 @@ class Structure {
         array_shift($tmpArr);
         return implode('/', $tmpArr);
     }
+    
+    public function getFirstSegment($path) {
+        $tmpArr=explode('/', $path);
+        return $tmpArr[0];
+    }
+    
 }

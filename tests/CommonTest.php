@@ -62,6 +62,44 @@ class CommonTest extends PHPUnit_Framework_TestCase {
                 return $structure->cutOffFirstSegment($remainingPath);
                 });
             $classNode1->connectToInputNode($rootNode);
+            
+            
+            $classNode2 = new DomainNode;
+            $classNode2->setTag('class2');
+            $classNode2->setPathTrigger(function($remainingPath)
+                {
+                if (strpos($remainingPath, 'class2') !== false) {
+                    return true;
+                }
+                return false;
+                });
+
+            $classNode2->setPathProcessor(function($remainingPath, array &$pathData) use ($structure)
+                {
+                $pathData['class'] = 'class2';
+                return $structure->cutOffFirstSegment($remainingPath);
+                });
+            $classNode2->connectToInputNode($rootNode);
+            
+            $idNode= new DomainNode;
+            $idNode->setTag('id');
+            $idNode->setPathTrigger(function($remainingPath) use ($structure) {
+                
+                $firstSegment = $structure->getFirstSegment($remainingPath);
+                if (preg_match('/^[0-9]*$/', $firstSegment)) {
+                    return true;
+                }
+                return false;
+                
+            });
+
+            $idNode->setPathProcessor(function($remainingPath, array &$pathData) use ($structure) {
+                $pathData['id'] = intval($structure->getFirstSegment($remainingPath));
+                return $structure->cutOffFirstSegment($remainingPath);
+            });
+            $idNode->connectToInputNode($classNode2);
+            
+            
 
             return $rootNode;
             });
@@ -71,7 +109,7 @@ class CommonTest extends PHPUnit_Framework_TestCase {
     }
     
     
-    public function testSuccess() {
+    public function testSuccessFirstPath() {
 
         $data = [];
 
@@ -86,20 +124,44 @@ class CommonTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('class1', $data['class']);        
     }
     
+    public function testSuccessSecondPath() {
+
+        $data = [];
+
+        /* @var $finalNode DomainNode */
+        $finalNode = self::$structure->trace('class2/123123', $data);
+
+        
+        $this->assertEquals(2, count(array_keys($data)));
+        
+    }
+    
     
     public function testFailure() {
+                
+        // there is no class 3 node connected to the root
+        $this->verifyThatFailsWithException(self::$structure, 'class3', ParseException::class);
         
-        // to support older phpunit versions which do not have expectException                
+        // "ids" after class 2 must be numeric, abc is not numeric
+        $this->verifyThatFailsWithException(self::$structure, 'class2/abc', ParseException::class);
+        
+    }
+    
+    private function verifyThatFailsWithException(Structure $structure, $path, $exceptionClass) {
         $caught=false;
-        
+        $unexpectedCaught=false;
         try {
-            // this shouldnt work as the node next to the root wont be selected, this must fail       
-            $finalNode = self::$structure->trace('class2', $data);
-        } catch(ParseException $e) {
-            $caught=true;
-        }
-        
-        $this->assertTrue($caught);
+            $data=[];
+            $structure->trace($path, $data);
+        } catch (Exception $e) {
+            if (get_class($e)==$exceptionClass) {
+                $caught=true;
+            } else {
+                $unexpectedCaught=true;
+            }
+        }        
+        $this->assertFalse($unexpectedCaught, 'unexpected exception was thrown ' . $e);
+        $this->assertTrue($caught,'expected exception was not caught');        
         
     }
 
