@@ -54,7 +54,8 @@ class Structure {
         $cursor=$this->rootNode;        
         
         while ($nextNode=$cursor->findOutputNode($path)) {
-            $path=$nextNode->processPath($path, $dataAccumulator);
+            $nextNode->processPath($path, $dataAccumulator);
+            $path=$this->cutOffFirstSegment($path);
             $cursor=$nextNode;
         }
         

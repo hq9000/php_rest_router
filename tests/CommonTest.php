@@ -59,7 +59,6 @@ class CommonTest extends PHPUnit_Framework_TestCase {
             $classNode1->setPathProcessor(function($remainingPath, array &$pathData) use ($structure)
                 {
                 $pathData['class'] = 'class1';
-                return $structure->cutOffFirstSegment($remainingPath);
                 });
             $classNode1->connectToInputNode($rootNode);
             
@@ -77,7 +76,6 @@ class CommonTest extends PHPUnit_Framework_TestCase {
             $classNode2->setPathProcessor(function($remainingPath, array &$pathData) use ($structure)
                 {
                 $pathData['class'] = 'class2';
-                return $structure->cutOffFirstSegment($remainingPath);
                 });
             $classNode2->connectToInputNode($rootNode);
             
@@ -95,7 +93,6 @@ class CommonTest extends PHPUnit_Framework_TestCase {
 
             $idNode->setPathProcessor(function($remainingPath, array &$pathData) use ($structure) {
                 $pathData['id'] = intval($structure->getFirstSegment($remainingPath));
-                return $structure->cutOffFirstSegment($remainingPath);
             });
             $idNode->connectToInputNode($classNode2);
             
