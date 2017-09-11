@@ -10,12 +10,6 @@ class Node {
     private $pathProcessor=null;
     private $pathTrigger=null;
     
-    public function getHandler() {
-        if ($this->hasHandler())
-        Assertions::assertTrue($this->hasHandler(), 'this node has no handler');
-        return $this->handler;
-    }
-   
     public function triggersToPath($path) {
         $pathTriggerFunction=$this->pathTrigger;
         return $pathTriggerFunction($path);
@@ -62,10 +56,4 @@ class Node {
         
         throw new ParseException('path is not fully parsed yet, but output node can\'t be dertermined. Path remainder is ' . $remainingPath);
     }
-    
-    public function handle($pathData, InternalApiRequest $request) {
-        $handler=$this->getHandler();
-        return $handler($pathData, $request);
-    }
-
 }
