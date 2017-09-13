@@ -79,6 +79,19 @@ class CommonTest extends PHPUnit_Framework_TestCase {
                 });
             $classNode2->connectToInputNode($rootNode);
             
+            
+            $notProcessingNode = new DomainNode;
+            $notProcessingNode->setTag('not processing');
+            $notProcessingNode->setPathTrigger(function($remainingPath)
+                {
+                if (strpos($remainingPath, 'not_processing') !== false) {
+                    return true;
+                }
+                return false;
+                });
+
+            $notProcessingNode->connectToInputNode($rootNode);
+            
             $idNode= new DomainNode;
             $idNode->setTag('id');
             $idNode->setPathTrigger(function($remainingPath) use ($structure) {
@@ -144,6 +157,12 @@ class CommonTest extends PHPUnit_Framework_TestCase {
         
     }
     
+    public function testNotProcessingNode() {
+        $data=[];
+        $finalNode = self::$structure->trace('not_processing', $data);
+        $this->assertEquals([],$data);
+    }
+    
     private function verifyThatFailsWithException(Structure $structure, $path, $exceptionClass) {
         $caught=false;
         $unexpectedCaught=false;
@@ -159,7 +178,7 @@ class CommonTest extends PHPUnit_Framework_TestCase {
         }        
         $this->assertFalse($unexpectedCaught, 'unexpected exception was thrown ' . $e);
         $this->assertTrue($caught,'expected exception was not caught');        
-        
+       
     }
 
 }

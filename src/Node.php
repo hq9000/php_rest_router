@@ -15,12 +15,19 @@ class Node {
         return $pathTriggerFunction($path);
     }
     
+    public function hasProcessor() {
+        return isset($this->pathProcessor);
+    }
+    
+    
     public function processPath($remainingPath, array &$pathData) {
         if (!is_string($remainingPath)) {
             throw new Exception('remaining path should be string');
         }
-        $processorFunction=$this->pathProcessor;
-        return $processorFunction($remainingPath, $pathData);
+        if ($this->hasProcessor()) {
+            $processorFunction = $this->pathProcessor;
+            $processorFunction($remainingPath, $pathData);
+        }
     }
     
     public function setPathProcessor($processor) {
