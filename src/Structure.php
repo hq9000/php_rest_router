@@ -62,10 +62,11 @@ class Structure
      * (passed by reference) so that it eventually
      * contains all the data gathered during travel.
      *
-     * @param string $path
+     * @param string  $path
      * @param array  &$dataAccumulator
      *
      * @return Node
+     * @throws Exceptions\ParseException
      */
     public function trace($path, &$dataAccumulator)
     {

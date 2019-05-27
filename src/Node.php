@@ -13,13 +13,31 @@ use hq9000\PhpRestRouter\Exceptions\ParseException;
 class Node {
 
     /** @var string */
-    private $pathProcessor=null;
+    private $name;
 
-    /** @var string  */
-    private $pathTrigger=null;
+    /** @var string */
+    private $pathProcessor = null;
+
+    /** @var string */
+    private $pathTrigger = null;
 
     /** @var Node[] */
     private $outputNodes;
+
+    /**
+     * @return string
+     */
+    public function getName() {
+        return $this->name;
+    }
+
+    /**
+     * Node constructor.
+     * @param null $name
+     */
+    public function __construct($name = null) {
+        $this->name = $name;
+    }
 
     /**
      * @param $path
@@ -27,7 +45,7 @@ class Node {
      * @return mixed
      */
     public function triggersToPath($path) {
-        $pathTriggerFunction=$this->pathTrigger;
+        $pathTriggerFunction = $this->pathTrigger;
         return $pathTriggerFunction($path);
     }
 
@@ -61,7 +79,7 @@ class Node {
      * @return $this
      */
     public function setPathProcessor($processor) {
-        $this->pathProcessor=$processor;
+        $this->pathProcessor = $processor;
         return $this;
     }
 
@@ -71,7 +89,7 @@ class Node {
      * @return $this
      */
     public function setPathTrigger($trigger) {
-        $this->pathTrigger=$trigger;
+        $this->pathTrigger = $trigger;
         return $this;
     }
 
@@ -81,7 +99,7 @@ class Node {
      * @return $this
      */
     public function connectToOutputNode(Node $outputNode) {
-        $this->outputNodes[]=$outputNode;
+        $this->outputNodes[] = $outputNode;
         return $this;
     }
 
@@ -99,17 +117,17 @@ class Node {
      * @throws ParseException
      */
     public function findOutputNode($remainingPath) {
-        
-        if ($remainingPath=='') {
+
+        if ($remainingPath == '') {
             return false;
         }
-        
+
         foreach ($this->outputNodes as $outputNode) {
             if ($outputNode->triggersToPath($remainingPath)) {
                 return $outputNode;
-            }            
+            }
         }
-        
+
         throw new ParseException('path is not fully parsed yet, but output node can\'t be determined. Path remainder is ' . $remainingPath);
     }
 }

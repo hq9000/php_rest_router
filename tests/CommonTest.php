@@ -1,6 +1,6 @@
 <?php
 
-namespace nhq9000\PhpRestRouter\tests;
+namespace hq9000\PhpRestRouter\tests;
 
 use Exception;
 use hq9000\PhpRestRouter\Node;
@@ -16,7 +16,7 @@ use PHPUnit_Framework_TestCase;
 
 /*
  * Here in test we use a simple subclass of a Node modeling some "Domain" class doing 
- * something actually usefull. This one can hold some "tag", in reality, 
+ * something actually useful. This one can hold some "tag", in reality,
  * it might, for instance, be able to handle a web request etc.
  */
 
@@ -44,9 +44,7 @@ class DomainNode extends Node
 class CommonTest extends PHPUnit_Framework_TestCase
 {
     /* @var $structure Structure */
-
     protected static $structure;
-
 
     /**
      *
@@ -159,15 +157,17 @@ class CommonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('class1', $data['class']);
     }
 
+    /**
+     * @throws ParseException
+     */
     public function testSuccessSecondPath()
     {
-
         $data = [];
 
         /* @var $finalNode DomainNode */
         $finalNode = self::$structure->trace('class2/123123', $data);
 
-        $this->assertEquals(Node::class, get_class($finalNode));
+        $this->assertEquals(DomainNode::class, get_class($finalNode));
         $this->assertEquals(2, count(array_keys($data)));
 
     }
@@ -184,11 +184,14 @@ class CommonTest extends PHPUnit_Framework_TestCase
 
     }
 
+    /**
+     * @throws ParseException
+     */
     public function testNotProcessingNode()
     {
         $data      = [];
         $finalNode = self::$structure->trace('not_processing', $data);
-        $this->assertEquals(Node::class, get_class($finalNode));
+        $this->assertEquals('not processing', $finalNode->getTag());
         $this->assertEquals([], $data);
     }
 
