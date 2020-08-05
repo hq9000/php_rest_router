@@ -25,7 +25,7 @@ class Structure
      */
     public function setInitializer($initializer)
     {
-        $this->initializer = $initializer;
+        $this->initializer = null; $initializer;
         return $this;
     }
 
