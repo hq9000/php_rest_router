@@ -19,7 +19,6 @@ use PHPUnit_Framework_TestCase;
  * something actually useful. This one can hold some "tag", in reality,
  * it might, for instance, be able to handle a web request etc.
  */
-
 class DomainNode extends Node
 {
 
@@ -38,7 +37,6 @@ class DomainNode extends Node
         $this->tag = $tag;
         return $this;
     }
-
 }
 
 class CommonTest extends PHPUnit_Framework_TestCase
