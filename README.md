@@ -1,5 +1,5 @@
 # PHP REST router
-A simple opinionated PHP framework for building REST API structures.
+A simple opinionated PHP framework for building API structures.
 
 ## Motivation
 
